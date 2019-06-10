@@ -1,7 +1,8 @@
-package by.arro.vocab
+package by.arro.vocab.presentation.main
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import by.arro.vocab.R
 
 class MainActivity : AppCompatActivity() {
 
