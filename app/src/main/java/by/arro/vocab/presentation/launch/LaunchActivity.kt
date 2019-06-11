@@ -10,7 +10,7 @@ class LaunchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(MainActivity.getIntent(this))
         finish()
     }
 }

@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import by.arro.vocab.R
+import by.arro.vocab.data.repository.SqlWordsRepository
 import by.arro.vocab.domain.entity.Word
+import by.arro.vocab.domain.interactors.GetWordsInteractorImpl
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MainView {
@@ -17,12 +19,16 @@ class MainActivity : AppCompatActivity(), MainView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        setupPresenter()
         initViews()
+        setupPresenter()
     }
 
     override fun onDestroy() {
-        presenter.destroy()
+        if (isChangingConfigurations) {
+            presenter.detach()
+        } else {
+            presenter.destroy()
+        }
         super.onDestroy()
     }
 
@@ -33,9 +39,15 @@ class MainActivity : AppCompatActivity(), MainView {
     private fun setupPresenter() {
         presenter = (lastCustomNonConfigurationInstance as MainPresenter?)?.apply {
             attach(this@MainActivity)
-        } ?: MainPresenterImpl().apply {
+        } ?: createPresenter().apply {
             firstAttach(this@MainActivity)
         }
+    }
+
+    private fun createPresenter(): MainPresenter {
+        return MainPresenterImpl(
+            GetWordsInteractorImpl(SqlWordsRepository())
+        )
     }
 
     private fun initViews() {
