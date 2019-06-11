@@ -11,6 +11,14 @@ class MainPresenterImpl : MainPresenter {
         this.view = view
     }
 
+    override fun onAddClicked() {
+
+    }
+
+    override fun onWordCliked(itemId: Int) {
+
+    }
+
     override fun destroy() {
         view = null
     }
