@@ -26,7 +26,11 @@ class MainActivity : AppCompatActivity(), MainView {
         super.onDestroy()
     }
 
-    fun setupPresenter() {
+    override fun updateWords(items: List<Word>) {
+        adapter.update(items)
+    }
+
+    private fun setupPresenter() {
         presenter = (lastCustomNonConfigurationInstance as MainPresenter?)?.apply {
             attach(this@MainActivity)
         } ?: MainPresenterImpl().apply {
@@ -34,23 +38,16 @@ class MainActivity : AppCompatActivity(), MainView {
         }
     }
 
-    fun initViews() {
+    private fun initViews() {
         fabAdd.setOnClickListener { presenter.onAddClicked() }
         initRecycleView()
     }
 
-    fun initRecycleView() {
+    private fun initRecycleView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = WordsAdapter(this, onItemClicked = { itemId ->
             presenter.onWordCliked(itemId)
         })
-
-        adapter.update(listOf(
-                Word(1, "1", "1"),
-                Word(2, "2", "1"),
-                Word(3, "3", "1"),
-                Word(4, "4", "1")
-        ))
     }
 
     override fun onRetainCustomNonConfigurationInstance(): Any {
